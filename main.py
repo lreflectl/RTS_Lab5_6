@@ -48,6 +48,9 @@ class MyButton1(Button):
         Thread(target=self.worker).start()
 
     def worker(self):
+
+        start = time.time()
+
         try:
             n = int(App.get_running_app().ti1.text)
         except:
@@ -68,7 +71,11 @@ class MyButton1(Button):
             res += str(i) + ', '
 
         res = res[:-2]
+
+        finish = time.time() - start
+
         App.get_running_app().lb1.text = res
+        App.get_running_app().lb1_1.text += str(finish)
 
 
 class MyButton2(Button):
@@ -76,6 +83,7 @@ class MyButton2(Button):
         Thread(target=self.worker).start()
 
     def worker(self):
+        start = time.time()
         try:
             learning_rate = float(App.get_running_app().ti2.text)
             deadline = float(App.get_running_app().ti3.text)
@@ -88,17 +96,23 @@ class MyButton2(Button):
             App.get_running_app().ti3.text = str(deadline)
             App.get_running_app().ti4.text = str(iterations)
         perceptron = Perceptron(learning_rate, deadline, iterations)
+
+        finish = time.time() - start
+
         App.get_running_app().lb2.text = perceptron.weights[0] + ', ' + perceptron.weights[1]
+        App.get_running_app().lb2_1.text += str(finish)
 
 
 class MainApp(App):
     # Lab 3.1
     ti1 = TextInput(text="Input here number for factorization")
     lb1 = Label(text="Hello! Its Lab#3.1. Results will be here.")
+    lb1_1 = Label(text='Calc time = ')
     bt1 = MyButton1(text="Calculate")
     res = 'empty'
     # Lab 3.2
     lb2 = Label(text="Hello! Its Lab#3.2. Weights will be here.")
+    lb2_1 = Label(text='Calc time = ')
     ti2 = TextInput(text="Input here learning rate")
     ti3 = TextInput(text="Input here deadline in seconds")
     ti4 = TextInput(text="Input here number of iterations")
@@ -108,15 +122,29 @@ class MainApp(App):
         bl1 = BoxLayout(orientation='vertical')
 
         bl1_1 = BoxLayout(padding=20, spacing=20)
-        bl1_1.add_widget(self.lb1)
+
+        bl1_1_1 = BoxLayout(spacing=20, orientation='vertical')
+        bl1_1_1.add_widget(self.lb1)
+        bl1_1_1.add_widget(self.lb1_1)
+
+        bl1_1.add_widget(bl1_1_1)
         bl1_1.add_widget(self.ti1)
         bl1_1.add_widget(self.bt1)
 
         bl1_2 = BoxLayout(padding=20, spacing=20)
-        bl1_2.add_widget(self.lb2)
-        bl1_2.add_widget(self.ti2)
-        bl1_2.add_widget(self.ti3)
-        bl1_2.add_widget(self.ti4)
+
+        bl1_2_1 = BoxLayout(spacing=20, orientation='vertical')
+        bl1_2_1.add_widget(self.lb2)
+        bl1_2_1.add_widget(self.lb2_1)
+
+        bl1_2.add_widget(bl1_2_1)
+
+        bl1_2_2 = BoxLayout(spacing=20, orientation='vertical')
+        bl1_2_2.add_widget(self.ti2)
+        bl1_2_2.add_widget(self.ti3)
+        bl1_2_2.add_widget(self.ti4)
+
+        bl1_2.add_widget(bl1_2_2)
         bl1_2.add_widget(self.bt2)
 
         bl1.add_widget(bl1_1)
